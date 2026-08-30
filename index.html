@@ -1,0 +1,1241 @@
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Search Visibility & CTR Opportunity Ranking | FlyRank Research</title>
+
+  <meta
+    name="description"
+    content="A research analysis of search visibility, CTR and average position using the FlyRank ML Internship dataset."
+  >
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      font-family: Inter, -apple-system, BlinkMacSystemFont, "Segoe UI",
+                   Roboto, Helvetica, Arial, sans-serif;
+      background: #f7f8fa;
+      color: #17202a;
+      line-height: 1.7;
+    }
+
+    a {
+      color: #2563eb;
+      text-decoration: none;
+    }
+
+    a:hover {
+      text-decoration: underline;
+    }
+
+    .hero {
+      background: #111827;
+      color: white;
+      padding: 80px 20px 70px;
+    }
+
+    .hero-inner {
+      max-width: 1100px;
+      margin: auto;
+    }
+
+    .eyebrow {
+      color: #93c5fd;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 18px;
+    }
+
+    h1 {
+      font-size: clamp(36px, 6vw, 64px);
+      line-height: 1.1;
+      max-width: 950px;
+      margin-bottom: 24px;
+    }
+
+    .hero-subtitle {
+      font-size: 20px;
+      color: #d1d5db;
+      max-width: 850px;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: auto;
+      padding: 0 20px;
+    }
+
+    nav {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      position: sticky;
+      top: 0;
+      z-index: 10;
+    }
+
+    nav .container {
+      display: flex;
+      gap: 22px;
+      overflow-x: auto;
+      padding-top: 14px;
+      padding-bottom: 14px;
+    }
+
+    nav a {
+      white-space: nowrap;
+      color: #374151;
+      font-size: 14px;
+      font-weight: 600;
+    }
+
+    section {
+      padding: 60px 0;
+    }
+
+    section + section {
+      border-top: 1px solid #e5e7eb;
+    }
+
+    h2 {
+      font-size: 32px;
+      margin-bottom: 20px;
+      color: #111827;
+    }
+
+    h3 {
+      font-size: 21px;
+      margin: 28px 0 10px;
+      color: #1f2937;
+    }
+
+    p {
+      margin-bottom: 16px;
+    }
+
+    .abstract {
+      background: white;
+      margin-top: -35px;
+      position: relative;
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+    }
+
+    .abstract h2 {
+      font-size: 24px;
+    }
+
+    .stat-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 16px;
+      margin: 30px 0;
+    }
+
+    .stat {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .stat-number {
+      font-size: 32px;
+      font-weight: 800;
+      color: #111827;
+      margin-bottom: 5px;
+    }
+
+    .stat-label {
+      color: #6b7280;
+      font-size: 14px;
+    }
+
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 18px;
+      margin-top: 25px;
+    }
+
+    .card {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px;
+    }
+
+    .card strong {
+      display: block;
+      margin-bottom: 8px;
+      color: #111827;
+    }
+
+    .highlight {
+      background: #eff6ff;
+      border-left: 5px solid #2563eb;
+      padding: 22px 24px;
+      border-radius: 8px;
+      margin: 25px 0;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border-left: 5px solid #f97316;
+      padding: 22px 24px;
+      border-radius: 8px;
+      margin: 25px 0;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      background: white;
+      margin: 25px 0;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #e5e7eb;
+    }
+
+    th,
+    td {
+      padding: 13px 14px;
+      text-align: left;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 14px;
+    }
+
+    th {
+      background: #f3f4f6;
+      font-weight: 700;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    .chart {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 18px;
+      margin: 24px 0;
+    }
+
+    .chart img {
+      width: 100%;
+      height: auto;
+      display: block;
+      border-radius: 8px;
+    }
+
+    .chart-placeholder {
+      padding: 40px;
+      text-align: center;
+      background: #f3f4f6;
+      color: #6b7280;
+      border-radius: 8px;
+    }
+
+    code {
+      background: #eef2f7;
+      padding: 3px 6px;
+      border-radius: 5px;
+      font-size: 0.9em;
+    }
+
+    pre {
+      background: #111827;
+      color: #e5e7eb;
+      padding: 20px;
+      border-radius: 10px;
+      overflow-x: auto;
+      margin: 20px 0;
+    }
+
+    ul,
+    ol {
+      padding-left: 24px;
+      margin-bottom: 18px;
+    }
+
+    li {
+      margin-bottom: 8px;
+    }
+
+    .tag {
+      display: inline-block;
+      background: #e5e7eb;
+      color: #374151;
+      padding: 4px 9px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      margin-right: 5px;
+    }
+
+    .recommendation {
+      background: white;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      padding: 24px;
+      margin: 16px 0;
+    }
+
+    .recommendation-number {
+      font-size: 14px;
+      font-weight: 800;
+      color: #2563eb;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      margin-bottom: 8px;
+    }
+
+    footer {
+      background: #111827;
+      color: #d1d5db;
+      padding: 50px 20px;
+    }
+
+    footer .container {
+      text-align: center;
+    }
+
+    footer a {
+      color: #93c5fd;
+    }
+
+    @media (max-width: 800px) {
+      .stat-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      section {
+        padding: 45px 0;
+      }
+    }
+
+    @media (max-width: 500px) {
+      .stat-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero {
+        padding-top: 55px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+<header class="hero">
+  <div class="hero-inner">
+    <div class="eyebrow">FlyRank ML Internship · Search Intelligence Research</div>
+
+    <h1>
+      Ranking Search Content for CTR Opportunity
+    </h1>
+
+    <p class="hero-subtitle">
+      A transparent decision-support analysis using February 2026 search
+      visibility, CTR and average position to rank content pages for review.
+    </p>
+  </div>
+</header>
+
+<nav>
+  <div class="container">
+    <a href="#abstract">Abstract</a>
+    <a href="#introduction">Problem</a>
+    <a href="#data">Data</a>
+    <a href="#methodology">Methodology</a>
+    <a href="#results">Results</a>
+    <a href="#limitations">Limitations</a>
+    <a href="#recommendations">Recommendations</a>
+    <a href="#reproducibility">Reproducibility</a>
+    <a href="#acknowledgments">Data Credit</a>
+  </div>
+</nav>
+
+<main>
+
+  <!-- ABSTRACT -->
+
+  <section id="abstract">
+    <div class="container">
+      <div class="abstract">
+
+        <h2>Abstract</h2>
+
+        <p>
+          This study asks whether a simple ranking rule based on February
+          2026 search visibility, CTR and average search position can identify
+          content pages worth prioritizing for review.
+        </p>
+
+        <p>
+          The analysis aggregates February search performance and combines
+          normalized impressions, observed average position and CTR opportunity
+          into a transparent baseline score.
+        </p>
+
+        <p>
+          The resulting February ranking was evaluated against March 2026
+          outcomes using an out-of-time evaluation population of 134,238
+          content items.
+        </p>
+
+        <p>
+          The overall positive March CTR-change rate was 24.16%, while the
+          top 100 pages selected by the baseline had a 44.0% positive outcome
+          rate, corresponding to 1.82× lift over the overall rate.
+        </p>
+
+        <p>
+          The result supports the rule as a directional decision-support
+          ranking for content review, while making no causal claim about
+          content changes, Google rankings, or future performance.
+        </p>
+
+      </div>
+
+      <div class="stat-grid">
+
+        <div class="stat">
+          <div class="stat-number">153,559</div>
+          <div class="stat-label">February decision rows</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">134,238</div>
+          <div class="stat-label">Out-of-time evaluation rows</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">24.16%</div>
+          <div class="stat-label">Overall positive March outcome rate</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">1.82×</div>
+          <div class="stat-label">Top-100 lift vs overall rate</div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+
+  <!-- INTRODUCTION -->
+
+  <section id="introduction">
+    <div class="container">
+
+      <h2>1. Introduction / Problem Statement</h2>
+
+      <p>
+        Search teams often have more content pages to review than they can
+        manually inspect. A useful prioritization system should therefore
+        identify pages where the available search evidence suggests that a
+        review may be worthwhile.
+      </p>
+
+      <p>
+        This research focuses on a simple question:
+      </p>
+
+      <div class="highlight">
+        <strong>
+          Can February search visibility and CTR relative to average position
+          identify pages that are worth prioritizing for review?
+        </strong>
+      </div>
+
+      <p>
+        The decision supported by this analysis is not whether a page will
+        definitely improve after an intervention. Instead, it is whether a
+        content team should place a page higher in its review queue.
+      </p>
+
+      <h3>Baseline rule</h3>
+
+      <ol>
+        <li>Use pages with measurable February GSC impressions.</li>
+        <li>Give greater importance to pages with meaningful search visibility.</li>
+        <li>Compare CTR with pages at similar observed average positions.</li>
+        <li>Rank pages using a transparent opportunity score.</li>
+      </ol>
+
+      <p>
+        The primary baseline reason code is
+        <span class="tag">R1_CTR_POSITION_OPPORTUNITY</span>
+        and its corresponding action is
+        <span class="tag">PRIORITIZE_REVIEW</span>.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- DATA -->
+
+  <section id="data">
+    <div class="container">
+
+      <h2>2. Data</h2>
+
+      <p>
+        The analysis uses the FlyRank ML Internship warehouse release hosted
+        on Hugging Face. The primary table used for the capstone is
+        <code>fact_content_daily_performance</code>.
+      </p>
+
+      <div class="card-grid">
+
+        <div class="card">
+          <strong>Feature window</strong>
+          February 2026
+        </div>
+
+        <div class="card">
+          <strong>Future evaluation window</strong>
+          March 2026
+        </div>
+
+        <div class="card">
+          <strong>Primary table</strong>
+          fact_content_daily_performance
+        </div>
+
+      </div>
+
+      <h3>February features</h3>
+
+      <ul>
+        <li>GSC impressions</li>
+        <li>GSC clicks</li>
+        <li>CTR derived as clicks divided by impressions</li>
+        <li>Average search position</li>
+      </ul>
+
+      <h3>Aggregation</h3>
+
+      <p>
+        February observations were aggregated at the
+        <code>client_hash_id</code> and <code>content_hash_id</code> level.
+        Rows without GSC data and rows with zero impressions were excluded
+        from the CTR analysis.
+      </p>
+
+      <h3>Public-safe handling</h3>
+
+      <p>
+        The research output does not expose client names, domains, URLs,
+        private queries, credentials or raw exports. Content identifiers are
+        represented using hashed identifiers supplied by the dataset.
+      </p>
+
+      <h3>Evaluation data</h3>
+
+      <p>
+        March 2026 data was used only as a future outcome window. The February
+        ranking features were created without using March information.
+      </p>
+
+      <div class="highlight">
+        <strong>Data separation:</strong>
+        February was used for decision features and March was reserved for
+        out-of-time evaluation.
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- METHODOLOGY -->
+
+  <section id="methodology">
+    <div class="container">
+
+      <h2>3. Methodology</h2>
+
+      <p>
+        The analysis deliberately starts with an interpretable rule rather
+        than a complex predictive model. The purpose is to establish a
+        transparent benchmark that can be evaluated against future outcomes.
+      </p>
+
+      <h3>Baseline features</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th>Role</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>February impressions</td>
+            <td>Search visibility / volume component</td>
+          </tr>
+
+          <tr>
+            <td>February CTR</td>
+            <td>Observed click-capture signal</td>
+          </tr>
+
+          <tr>
+            <td>February average position</td>
+            <td>Position-aware context</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Baseline score</h3>
+
+      <p>
+        The score combines three transparent components:
+      </p>
+
+      <ol>
+        <li>
+          A normalized log-transformed impression component.
+        </li>
+
+        <li>
+          A position component that gives more weight to stronger observed
+          search positions.
+        </li>
+
+        <li>
+          A CTR opportunity component based on the observed CTR range.
+        </li>
+      </ol>
+
+      <p>
+        The resulting score is:
+      </p>
+
+      <pre>score =
+0.45 × normalized visibility
++ 0.35 × position component
++ 0.20 × CTR opportunity</pre>
+
+      <p>
+        Pages are then assigned differentiated actions using observed search
+        volume and position buckets.
+      </p>
+
+      <h3>Recommendation logic</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Reason code</th>
+            <th>Action</th>
+            <th>Interpretation</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>R1_CTR_POSITION_OPPORTUNITY</td>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>High visibility and weak CTR relative to position context</td>
+          </tr>
+
+          <tr>
+            <td>R2_VISIBILITY_CTR_GAP</td>
+            <td>REVIEW_METADATA</td>
+            <td>Meaningful visibility with a CTR opportunity</td>
+          </tr>
+
+          <tr>
+            <td>R3_RANKING_OPPORTUNITY</td>
+            <td>IMPROVE_CONTENT</td>
+            <td>Meaningful visibility but weaker observed position</td>
+          </tr>
+
+          <tr>
+            <td>R4_LOW_VOLUME_MONITOR</td>
+            <td>MONITOR</td>
+            <td>Lower-volume pages where evidence is less actionable</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Future outcome label</h3>
+
+      <p>
+        For out-of-time evaluation, a positive outcome was defined as an
+        increase in CTR between February and March 2026.
+      </p>
+
+      <p>
+        The evaluation population contained 134,238 content items. 32,437
+        recorded a positive March CTR change, producing an overall positive
+        outcome rate of 24.16%.
+      </p>
+
+      <h3>Leakage controls</h3>
+
+      <ul>
+        <li>February variables were used to construct the ranking.</li>
+        <li>March observations were reserved for outcome evaluation.</li>
+        <li>No March outcome was used to calculate the February score.</li>
+        <li>No private queries, client names, domains or URLs were used as features.</li>
+      </ul>
+
+      <div class="highlight">
+        <strong>Leakage check: PASS.</strong>
+        March was used only for the future outcome evaluation.
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- RESULTS -->
+
+  <section id="results">
+    <div class="container">
+
+      <h2>4. Results</h2>
+
+      <p>
+        The baseline ranking was evaluated using the same out-of-time
+        evaluation population. Performance was measured by examining the
+        proportion of positive March CTR changes among the highest-ranked
+        pages.
+      </p>
+
+      <div class="stat-grid">
+
+        <div class="stat">
+          <div class="stat-number">44.0%</div>
+          <div class="stat-label">Positive outcome rate among top 100</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">39.0%</div>
+          <div class="stat-label">Positive outcome rate among top 500</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">38.9%</div>
+          <div class="stat-label">Positive outcome rate among top 1,000</div>
+        </div>
+
+        <div class="stat">
+          <div class="stat-number">24.16%</div>
+          <div class="stat-label">Overall evaluation rate</div>
+        </div>
+
+      </div>
+
+      <h3>Top-K evaluation</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Top-K</th>
+            <th>Positive outcome rate</th>
+            <th>Lift vs overall</th>
+            <th>Positive pages</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>100</td>
+            <td>44.00%</td>
+            <td>1.82×</td>
+            <td>44</td>
+          </tr>
+
+          <tr>
+            <td>500</td>
+            <td>39.00%</td>
+            <td>1.61×</td>
+            <td>195</td>
+          </tr>
+
+          <tr>
+            <td>1,000</td>
+            <td>38.90%</td>
+            <td>1.61×</td>
+            <td>389</td>
+          </tr>
+
+          <tr>
+            <td>5,000</td>
+            <td>37.44%</td>
+            <td>1.55×</td>
+            <td>1,872</td>
+          </tr>
+
+          <tr>
+            <td>10,000</td>
+            <td>37.63%</td>
+            <td>1.56×</td>
+            <td>3,763</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <div class="highlight">
+        <strong>Main finding:</strong>
+        The top 100 pages ranked by the February baseline had a 44.0%
+        positive March CTR-change rate, compared with 24.16% across the full
+        evaluation population. This corresponds to approximately 1.82× lift.
+      </div>
+
+      <h3>Recommendation distribution</h3>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Action</th>
+            <th>Pages</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>MONITOR</td>
+            <td>108,205</td>
+          </tr>
+
+          <tr>
+            <td>IMPROVE_CONTENT</td>
+            <td>44,481</td>
+          </tr>
+
+          <tr>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>873</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3>Recommendation score distribution</h3>
+
+      <div class="chart">
+        <img
+          src="score_distribution.png"
+          alt="Distribution of recommendation scores"
+        >
+      </div>
+
+      <h3>Action distribution</h3>
+
+      <div class="chart">
+        <img
+          src="action_distribution.png"
+          alt="Distribution of recommended actions"
+        >
+      </div>
+
+      <h3>Reason-code distribution</h3>
+
+      <div class="chart">
+        <img
+          src="reason_code_distribution.png"
+          alt="Distribution of recommendation reason codes"
+        >
+      </div>
+
+      <h3>Score vs CTR</h3>
+
+      <div class="chart">
+        <img
+          src="score_vs_ctr.png"
+          alt="Recommendation score versus February CTR"
+        >
+      </div>
+
+      <h3>Score vs average position</h3>
+
+      <div class="chart">
+        <img
+          src="score_vs_position.png"
+          alt="Recommendation score versus February average position"
+        >
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- LIMITATIONS -->
+
+  <section id="limitations">
+    <div class="container">
+
+      <h2>5. Limitations & Honest Framing</h2>
+
+      <div class="warning">
+
+        <strong>This analysis is decision support, not causal evidence.</strong>
+
+        <p style="margin-top: 10px; margin-bottom: 0;">
+          A high score does not guarantee that changing a page will increase
+          clicks, rankings or engagement.
+        </p>
+
+      </div>
+
+      <h3>What was observed</h3>
+
+      <p>
+        The analysis observed a higher rate of positive March CTR changes
+        among pages near the top of the February ranking than across the
+        overall evaluation population.
+      </p>
+
+      <h3>What this does not prove</h3>
+
+      <ul>
+        <li>It does not prove that the ranking rule causes CTR improvement.</li>
+        <li>It does not prove that changing a page will improve performance.</li>
+        <li>It does not explain Google's ranking algorithm.</li>
+        <li>It does not prove that a specific content intervention caused a March change.</li>
+      </ul>
+
+      <h3>Measurement considerations</h3>
+
+      <p>
+        CTR can vary because of query mix, search-result features, seasonality
+        and measurement variation. Pages with low click counts can also have
+        unstable CTR estimates.
+      </p>
+
+      <p>
+        For these reasons, the recommendations should be interpreted as
+        directional review priorities rather than guaranteed optimization
+        opportunities.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- RECOMMENDATIONS -->
+
+  <section id="recommendations">
+    <div class="container">
+
+      <h2>6. Ranked Recommendations</h2>
+
+      <p>
+        The following action playbook translates the ranking analysis into
+        practical review priorities.
+      </p>
+
+      <div class="recommendation">
+        <div class="recommendation-number">Priority 1 · R1</div>
+
+        <h3>Prioritize high-visibility CTR opportunities</h3>
+
+        <p>
+          Review pages with very high observed February search visibility,
+          strong observed positions and CTR below the median for comparable
+          position buckets.
+        </p>
+
+        <span class="tag">PRIORITIZE_REVIEW</span>
+        <span class="tag">R1_CTR_POSITION_OPPORTUNITY</span>
+      </div>
+
+      <div class="recommendation">
+        <div class="recommendation-number">Priority 2 · R2</div>
+
+        <h3>Review metadata where visibility is meaningful</h3>
+
+        <p>
+          Pages with high or very high visibility and weaker CTR in the
+          5–10 position range are candidates for metadata and search-snippet
+          review.
+        </p>
+
+        <span class="tag">REVIEW_METADATA</span>
+        <span class="tag">R2_VISIBILITY_CTR_GAP</span>
+      </div>
+
+      <div class="recommendation">
+        <div class="recommendation-number">Priority 3 · R3</div>
+
+        <h3>Improve content for weaker-ranking pages</h3>
+
+        <p>
+          Pages with meaningful search visibility but weaker observed
+          positions can be placed into a broader content-improvement queue.
+        </p>
+
+        <span class="tag">IMPROVE_CONTENT</span>
+        <span class="tag">R3_RANKING_OPPORTUNITY</span>
+      </div>
+
+      <div class="recommendation">
+        <div class="recommendation-number">Priority 4 · R4</div>
+
+        <h3>Monitor low-volume pages</h3>
+
+        <p>
+          Pages with limited search volume should generally be monitored
+          rather than receiving immediate optimization effort, because the
+          available evidence may be less stable.
+        </p>
+
+        <span class="tag">MONITOR</span>
+        <span class="tag">R4_LOW_VOLUME_MONITOR</span>
+      </div>
+
+      <h3>Top-ranked review queue</h3>
+
+      <p>
+        The capstone notebook produces a ranked Top-20 recommendation table.
+        Content identifiers are retained only as hashed identifiers to
+        maintain the public-safe requirement.
+      </p>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Rank</th>
+            <th>Content ID</th>
+            <th>Action</th>
+            <th>Reason code</th>
+            <th>February impressions</th>
+            <th>February CTR</th>
+            <th>Average position</th>
+            <th>Score</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr>
+            <td>1</td>
+            <td>content_c150891972f394a2</td>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>R1_CTR_POSITION_OPPORTUNITY</td>
+            <td>41,585</td>
+            <td>0.000553</td>
+            <td>3.397</td>
+            <td>0.671039</td>
+          </tr>
+
+          <tr>
+            <td>2</td>
+            <td>content_a07d1e3236680189</td>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>R1_CTR_POSITION_OPPORTUNITY</td>
+            <td>29,223</td>
+            <td>0.000582</td>
+            <td>3.596</td>
+            <td>0.654611</td>
+          </tr>
+
+          <tr>
+            <td>3</td>
+            <td>content_97d7732bcbfc6931</td>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>R1_CTR_POSITION_OPPORTUNITY</td>
+            <td>21,348</td>
+            <td>0.000562</td>
+            <td>3.116</td>
+            <td>0.651936</td>
+          </tr>
+
+          <tr>
+            <td>4</td>
+            <td>content_c406f6bcaac8a477</td>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>R1_CTR_POSITION_OPPORTUNITY</td>
+            <td>30,545</td>
+            <td>0.000033</td>
+            <td>4.226</td>
+            <td>0.647167</td>
+          </tr>
+
+          <tr>
+            <td>5</td>
+            <td>content_0c85ddc060b983a1</td>
+            <td>PRIORITIZE_REVIEW</td>
+            <td>R1_CTR_POSITION_OPPORTUNITY</td>
+            <td>23,728</td>
+            <td>0.000084</td>
+            <td>3.616</td>
+            <td>0.646702</td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p>
+        The complete recommendation table is reproducible from the capstone
+        notebook and is intentionally not expanded here into client-facing
+        URLs or domain information.
+      </p>
+
+    </div>
+  </section>
+
+
+  <!-- REPRODUCIBILITY -->
+
+  <section id="reproducibility">
+    <div class="container">
+
+      <h2>7. Reproducibility</h2>
+
+      <p>
+        The analysis is implemented in a public GitHub repository. The
+        capstone notebook contains the data loading, feature construction,
+        baseline scoring, out-of-time evaluation and recommendation logic.
+      </p>
+
+      <div class="card-grid">
+
+        <div class="card">
+          <strong>Source repository</strong>
+
+          <a
+            href="https://github.com/hacker3code/Flyrank-AI"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            GitHub Repository
+          </a>
+        </div>
+
+        <div class="card">
+          <strong>Capstone notebook</strong>
+
+          <a
+            href="https://colab.research.google.com/github/hacker3code/Flyrank-AI/blob/main/work/notebooks/capstone.ipynb"
+            target="_blank"
+            rel="noopener noreferrer"
+          >
+            Open Capstone in Colab
+          </a>
+        </div>
+
+        <div class="card">
+          <strong>Implementation</strong>
+
+          Python · DuckDB · Pandas · NumPy · Matplotlib
+        </div>
+
+      </div>
+
+      <h3>Reproduction flow</h3>
+
+      <ol>
+        <li>Authenticate to the FlyRank warehouse using an authorized read token.</li>
+        <li>Load the February 2026 content-performance partition.</li>
+        <li>Aggregate impressions, clicks and position at content level.</li>
+        <li>Calculate February CTR and baseline opportunity score.</li>
+        <li>Generate ranked action recommendations.</li>
+        <li>Load March 2026 only for the future outcome.</li>
+        <li>Join the future outcome with the February ranking.</li>
+        <li>Evaluate Top-K positive outcome rates and lift.</li>
+      </ol>
+
+      <div class="warning">
+        <strong>Credentials:</strong>
+        Authentication tokens are never included in the public repository or
+        this paper.
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ACKNOWLEDGMENTS -->
+
+  <section id="acknowledgments">
+    <div class="container">
+
+      <h2>8. Acknowledgments & Data Credit</h2>
+
+      <p>
+        This project was completed as part of the FlyRank ML Internship
+        program and uses the provided internship warehouse for research and
+        educational analysis.
+      </p>
+
+      <p>
+        <strong>Built on the FlyRank ML Internship dataset.</strong>
+      </p>
+
+      <p>
+        Data source:
+        <a
+          href="https://flyrank.ai"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          FlyRank
+        </a>
+      </p>
+
+      <p>
+        The analysis is an independent research exercise and should be
+        interpreted according to the limitations and public-safe framing
+        described above.
+      </p>
+
+    </div>
+  </section>
+
+</main>
+
+
+<footer>
+  <div class="container">
+
+    <p>
+      FlyRank ML Internship · Search Intelligence Capstone
+    </p>
+
+    <p>
+      Built as a reproducible, public-safe decision-support analysis.
+    </p>
+
+    <p>
+      <a
+        href="https://github.com/hacker3code/Flyrank-AI"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        View the GitHub repository
+      </a>
+    </p>
+
+  </div>
+</footer>
+
+</body>
+</html>
+```
